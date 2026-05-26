@@ -17,7 +17,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-cream text-gray-800 antialiased">
-      {/* 1. Header Navigation */}
+      {/* 1. Header Navigation test */}
       <Header />
 
       <main className="flex-1 flex flex-col w-full">
