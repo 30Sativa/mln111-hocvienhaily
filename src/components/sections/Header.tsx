@@ -3,14 +3,28 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [clickedTab, setClickedTab] = useState<string | null>(null);
+  const [isAIChatOpen, setIsAIChatOpen] = useState(false);
+
+  // Listen for global AI chat open/close events to synchronize active state highlighting
+  useEffect(() => {
+    const handleOpen = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setIsAIChatOpen(customEvent.detail?.open ?? true);
+    };
+    window.addEventListener("open-ai-chat", handleOpen);
+    return () => window.removeEventListener("open-ai-chat", handleOpen);
+  }, []);
 
   // Dynamically resolve active tab name based on URL path or active anchor click
-  const activeTab = clickedTab || (pathname === "/lessons" ? "Bài học" : "Trang chủ");
+  const activeTab = isAIChatOpen
+    ? "Hỏi đáp"
+    : clickedTab || (pathname.startsWith("/lessons") ? "Bài học" : "Trang chủ");
 
   // Reset local click overrides whenever the page pathname changes
   useEffect(() => {
@@ -21,7 +35,7 @@ export default function Header() {
     { name: "Trang chủ", href: "/" },
     { name: "Bài học", href: "/lessons" },
     { name: "Chọn học tập", href: "/#chon-che-do" },
-    { name: "Hỏi đáp", href: "/#lien-he" },
+    { name: "Hỏi đáp", href: "#" },
   ];
 
   return (
@@ -48,11 +62,22 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-1.5">
           {navItems.map((item) => {
             const isActive = activeTab === item.name;
+            const isHoiDap = item.name === "Hỏi đáp";
+
+            const handleClick = (e: React.MouseEvent) => {
+              if (isHoiDap) {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent("open-ai-chat", { detail: { open: true } }));
+              } else {
+                setClickedTab(item.name);
+              }
+            };
+
             return (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
-                onClick={() => setClickedTab(item.name)}
+                onClick={handleClick}
                 className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
                   isActive
                     ? "bg-primary-red text-white shadow-sm"
@@ -60,7 +85,7 @@ export default function Header() {
                 }`}
               >
                 {item.name}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -166,14 +191,24 @@ export default function Header() {
           <nav className="flex flex-col gap-1">
             {navItems.map((item) => {
               const isActive = activeTab === item.name;
+              const isHoiDap = item.name === "Hỏi đáp";
+
+              const handleClick = (e: React.MouseEvent) => {
+                if (isHoiDap) {
+                  e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                  window.dispatchEvent(new CustomEvent("open-ai-chat", { detail: { open: true } }));
+                } else {
+                  setClickedTab(item.name);
+                  setIsMobileMenuOpen(false);
+                }
+              };
+
               return (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => {
-                    setClickedTab(item.name);
-                    setIsMobileMenuOpen(false);
-                  }}
+                  onClick={handleClick}
                   className={`block px-4 py-3 rounded-xl text-base font-semibold transition-colors duration-200 ${
                     isActive
                       ? "bg-primary-red text-white"
@@ -181,7 +216,7 @@ export default function Header() {
                   }`}
                 >
                   {item.name}
-                </a>
+                </Link>
               );
             })}
           </nav>

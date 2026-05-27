@@ -7,8 +7,8 @@ interface ChapterItem {
 
 interface Chapter {
   id: string;
-  code: string; // e.g., "Học phần 1"
-  subtitle: string; // e.g., "Vấn đề cơ bản của triết học"
+  code: string;
+  subtitle: string;
   items: ChapterItem[];
 }
 
@@ -17,89 +17,56 @@ export default function Lessons() {
     {
       id: "1",
       code: "Học phần 1",
-      subtitle: "Vấn đề cơ bản của triết học",
+      subtitle: "Khái Lược Về Triết Học",
       items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
+        { name: "Nội dung bài học", link: "/lessons/1?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/1?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/1?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/1?tab=flashcard" },
       ],
     },
     {
       id: "2",
       code: "Học phần 2",
-      subtitle: "Lịch sử triết học & tư tưởng",
+      subtitle: "Vấn Đề Cơ Bản Của Triết Học",
       items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
+        { name: "Nội dung bài học", link: "/lessons/2?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/2?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/2?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/2?tab=flashcard" },
       ],
     },
     {
       id: "3",
       code: "Học phần 3",
-      subtitle: "Chủ nghĩa duy vật biện chứng",
+      subtitle: "Sự Ra Đời & Phát Triển Triết Học Mác – Lênin",
       items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
+        { name: "Nội dung bài học", link: "/lessons/3?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/3?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/3?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/3?tab=flashcard" },
       ],
     },
     {
       id: "4",
       code: "Học phần 4",
-      subtitle: "Phép biện chứng duy vật luận",
+      subtitle: "Đối Tượng & Chức Năng Triết Học Mác – Lênin",
       items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
+        { name: "Nội dung bài học", link: "/lessons/4?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/4?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/4?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/4?tab=flashcard" },
       ],
     },
     {
       id: "5",
       code: "Học phần 5",
-      subtitle: "Lý luận nhận thức khoa học",
+      subtitle: "Vật Chất & Phương Thức Tồn Tại",
       items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
-      ],
-    },
-    {
-      id: "6",
-      code: "Học phần 6",
-      subtitle: "Chủ nghĩa duy vật lịch sử",
-      items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
-      ],
-    },
-    {
-      id: "7",
-      code: "Học phần 7",
-      subtitle: "Học thuyết hình thái kinh tế",
-      items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
-      ],
-    },
-    {
-      id: "8",
-      code: "Học phần 8",
-      subtitle: "Ý thức xã hội & con người",
-      items: [
-        { name: "Nội dung tóm tắt", link: "#summary" },
-        { name: "Tóm tắt đề cương", link: "#outline" },
-        { name: "Câu hỏi ôn tập", link: "#questions" },
-        { name: "Game tri thức", link: "#game" },
+        { name: "Nội dung bài học", link: "/lessons/5?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/5?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/5?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/5?tab=flashcard" },
       ],
     },
   ];
@@ -181,13 +148,6 @@ export default function Lessons() {
 
             </div>
           ))}
-        </div>
-
-        {/* Golden Yellow See More Button matching Mockup */}
-        <div className="mt-14 flex justify-center">
-          <button className="inline-flex h-12 w-full max-w-sm items-center justify-center rounded-full bg-[#f3b150] px-10 text-base font-extrabold text-white shadow-sm transition-all duration-300 hover:bg-[#df9937] hover:scale-102 hover:shadow-md active:scale-100 uppercase tracking-wide">
-            XEM THÊM
-          </button>
         </div>
 
       </div>
