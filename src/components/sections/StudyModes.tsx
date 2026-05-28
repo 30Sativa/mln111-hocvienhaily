@@ -130,7 +130,7 @@ export default function StudyModes() {
 
             {/* Gold Button Link */}
             <a
-              href="/lessons"
+              href="/game"
               className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-500 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:bg-amber-600 hover:scale-102"
             >
               CHƠI NGAY <span className="text-base font-normal">→</span>

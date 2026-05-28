@@ -1,290 +1,297 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-interface Question {
-  id: number;
-  question: string;
-  options: string[];
-  correctAnswer: number; // Index of options (0-3)
-  explanation: string;
-}
-
 export default function MiniQuiz() {
-  const [quizState, setQuizState] = useState<"start" | "active" | "result">("start");
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState<number | null>(null);
 
-  const questions: Question[] = [
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const score = localStorage.getItem("mln-game-highscore");
+        if (score) {
+          setHighScore(parseInt(score, 10));
+        }
+      } catch (e) {
+        console.error("Error reading high score from localStorage:", e);
+      }
+    }
+  }, []);
+
+  const towerFloors = [
     {
-      id: 1,
-      question: "Theo triết học Mác - Lênin, nguồn gốc tự nhiên của ý thức gồm những yếu tố nào?",
-      options: [
-        "Bộ óc người và thế giới khách quan tác động lên bộ óc người.",
-        "Lao động và ngôn ngữ tiến hóa.",
-        "Sự phát triển của các hình thức phản ánh sinh học tự nhiên.",
-        "Sự thích nghi thích ứng của sinh vật với môi trường.",
-      ],
-      correctAnswer: 0,
-      explanation:
-        "Nguồn gốc tự nhiên của ý thức gồm hai yếu tố không thể thiếu: Bộ óc con người hoạt động bình thường và sự tác động của thế giới khách quan lên bộ óc đó, tạo ra quan hệ phản ánh năng động hiện thực vào trong bộ óc.",
+      num: 5,
+      name: "Vật Chất & Phương Thức Tồn Tại",
+      icon: "⚛️",
+      color: "border-amber-400 bg-amber-50/90 text-amber-900 shadow-amber-100",
+      pill: "bg-amber-500 text-white",
+      desc: "Chương 5: Đi sâu vào phạm trù vật chất, vận động, không gian và thời gian.",
     },
     {
-      id: 2,
-      question: "Phép biện chứng duy vật nghiên cứu những mối liên hệ nào?",
-      options: [
-        "Những mối liên hệ đặc thù của từng lĩnh vực tự nhiên riêng lẻ.",
-        "Những mối liên hệ phổ biến nhất của thế giới khách quan.",
-        "Những mối liên hệ chủ quan do tư duy con người tự suy luận.",
-        "Những mối liên hệ nhân quả cơ giới trong vật lý học cổ điển.",
-      ],
-      correctAnswer: 1,
-      explanation:
-        "Phép biện chứng duy vật là khoa học về mối liên hệ phổ biến nhất và những quy luật vận động, phát triển chung nhất của tự nhiên, xã hội loài người và tư duy.",
+      num: 4,
+      name: "Đối Tượng & Chức Năng Triết Học Mác - Lênin",
+      icon: "🔬",
+      color: "border-emerald-400 bg-emerald-50/90 text-emerald-900 shadow-emerald-100",
+      pill: "bg-emerald-600 text-white",
+      desc: "Chương 4: Tìm hiểu đối tượng nghiên cứu và vai trò thế giới quan/phương pháp luận.",
     },
     {
-      id: 3,
-      question: "Bản chất của ý thức theo quan điểm duy vật biện chứng là gì?",
-      options: [
-        "Sự phản ánh thụ động, sao chép nguyên xi thế giới khách quan.",
-        "Một dạng vật chất đặc biệt có thể cân đo đong đếm do bộ óc tiết ra.",
-        "Sự phản ánh năng động, sáng tạo thế giới khách quan vào bộ óc người.",
-        "Sự tồn tại độc lập hoàn toàn không phụ thuộc vào thế giới hiện thực vật chất.",
-      ],
-      correctAnswer: 2,
-      explanation:
-        "Ý thức là sự phản ánh mang tính năng động, sáng tạo thế giới hiện thực khách quan vào trong bộ não người. Ý thức là hình ảnh chủ quan của thế giới khách quan.",
+      num: 3,
+      name: "Sự Ra Đời & Phát Triển Triết Học Mác - Lênin",
+      icon: "🏛️",
+      color: "border-blue-400 bg-blue-50/90 text-blue-900 shadow-blue-100",
+      pill: "bg-blue-600 text-white",
+      desc: "Chương 3: Tiền đề lý luận, điều kiện lịch sử và các giai đoạn phát triển.",
+    },
+    {
+      num: 2,
+      name: "Vấn Đề Cơ Bản Của Triết Học",
+      icon: "⚖️",
+      color: "border-purple-400 bg-purple-50/90 text-purple-900 shadow-purple-100",
+      pill: "bg-purple-600 text-white",
+      desc: "Chương 2: Mối quan hệ giữa vật chất và ý thức; khả tri và bất khả tri luận.",
+    },
+    {
+      num: 1,
+      name: "Khái Lược Về Triết Học",
+      icon: "📖",
+      color: "border-rose-400 bg-rose-50/90 text-rose-900 shadow-rose-100",
+      pill: "bg-rose-600 text-white",
+      desc: "Chương 1: Nguồn gốc triết học và hạt nhân lý luận của thế giới quan.",
     },
   ];
 
-  const handleStartQuiz = () => {
-    setQuizState("active");
-    setCurrentIdx(0);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setScore(0);
-  };
-
-  const handleSelectOption = (optionIdx: number) => {
-    if (isAnswered) return;
-    setSelectedAnswer(optionIdx);
-    setIsAnswered(true);
-    if (optionIdx === questions[currentIdx].correctAnswer) {
-      setScore((prev) => prev + 1);
-    }
-  };
-
-  const handleNextQuestion = () => {
-    if (currentIdx < questions.length - 1) {
-      setCurrentIdx((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-    } else {
-      setQuizState("result");
-    }
-  };
-
   return (
-    <section id="mini-quiz" className="relative w-full py-16 md:py-24 bg-cream border-t border-amber-100/30 overflow-hidden">
-      {/* Visual background ambient circles */}
-      <div className="absolute top-10 left-10 h-72 w-72 rounded-full bg-primary-red/2 blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 h-72 w-72 rounded-full bg-amber-500/2 blur-[80px] pointer-events-none" />
+    <section
+      id="mini-quiz"
+      className="relative w-full py-20 md:py-28 bg-cream border-t border-amber-100/30 overflow-hidden"
+    >
+      {/* Styles for custom premium micro-animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-8px) rotate(2deg);
+          }
+        }
+        @keyframes float-reverse {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(8px) rotate(-2deg);
+          }
+        }
+        @keyframes pulse-subtle {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.9;
+            transform: scale(1.03);
+          }
+        }
+        .anim-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        .anim-float-delay {
+          animation: float-reverse 7s ease-in-out infinite;
+        }
+        .anim-pulse-subtle {
+          animation: pulse-subtle 3s ease-in-out infinite;
+        }
+      `}</style>
 
-      <div className="mx-auto max-w-4xl px-4 sm:px-6">
+      {/* Background ambient glow effects */}
+      <div className="absolute top-20 left-10 h-96 w-96 rounded-full bg-primary-red/3 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full bg-amber-500/3 blur-[100px] pointer-events-none" />
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         
-        {/* Header Block */}
-        <div className="flex flex-col items-center justify-center text-center space-y-4 mb-12">
-          <span className="rounded-full bg-amber-500/10 border border-amber-300/40 px-5 py-2 text-[#df9937] font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-sm">
-            🎯 Mini Game Trí Tuệ
+        {/* Section Header */}
+        <div className="flex flex-col items-center justify-center text-center space-y-4 mb-16">
+          <span className="rounded-full bg-primary-red/10 border border-primary-red/20 px-5 py-2 text-primary-red font-extrabold text-xs sm:text-sm uppercase tracking-widest shadow-sm">
+            🎮 CHẾ ĐỘ CHƠI MỚI CỰC HẤP DẪN
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 font-sans">
-            Thử Thách Trắc Nghiệm Nhanh
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 font-sans">
+            Hành Trình Triết Học
           </h2>
-          <div className="h-1 w-16 rounded-full bg-primary-red" />
+          <p className="text-gray-500 font-medium max-w-xl text-sm sm:text-base">
+            Phương pháp học trắc nghiệm hóa thân qua mô hình leo tháp tri thức đầy thử thách.
+          </p>
+          <div className="h-1.5 w-24 rounded-full bg-primary-red" />
         </div>
 
-        {/* Quiz Board Container */}
-        <div className="w-full rounded-3xl border border-amber-100/50 bg-white p-6 sm:p-10 shadow-md transition-all duration-300 hover:shadow-lg relative overflow-hidden">
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Active Progress Line */}
-          {quizState === "active" && (
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gray-100">
-              <div
-                className="h-full bg-primary-red transition-all duration-500"
-                style={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}
-              />
+          {/* Left Column: Intro text and features */}
+          <div className="lg:col-span-6 space-y-8 text-left">
+            <div className="space-y-4">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-800 leading-tight">
+                Chinh phục 5 tầng tháp lý luận Mác - Lênin
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 font-medium leading-relaxed">
+                Biến những giờ ôn tập lý thuyết khô khan thành cuộc hành trình leo tháp kịch tính. Bạn sẽ bắt đầu từ tầng 1 và phải trả lời chính xác các câu hỏi để tiến lên tầng cao hơn. Mỗi tầng mang một chủ đề kiến thức riêng biệt giúp bạn ôn tập có hệ thống.
+              </p>
             </div>
-          )}
 
-          {/* 1. START STATE */}
-          {quizState === "start" && (
-            <div className="flex flex-col items-center text-center space-y-6 py-6 animate-in fade-in duration-300">
-              
-              {/* Cute Mascot */}
-              <div className="relative h-44 w-44 sm:h-52 sm:w-52 transition-transform duration-500 hover:scale-105 select-none drop-shadow-md">
+            {/* Features List */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-amber-100/40 shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-2xl mt-0.5">⏱️</span>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-sm sm:text-base">20s Suy Nghĩ</h4>
+                  <p className="text-xs text-gray-500 font-medium">Áp lực thời gian đòi hỏi phản xạ nhanh nhạy.</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-amber-100/40 shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-2xl mt-0.5">❤️</span>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-sm sm:text-base">3 Mạng Sống</h4>
+                  <p className="text-xs text-gray-500 font-medium">Sai 3 câu là dừng cuộc chơi. Hãy thận trọng!</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-amber-100/40 shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-2xl mt-0.5">🔥</span>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-sm sm:text-base">Combo Nhân Điểm</h4>
+                  <p className="text-xs text-gray-500 font-medium">Trả lời đúng liên tiếp để nhân x2, x3, x4 điểm.</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-amber-100/40 shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-2xl mt-0.5">🎯</span>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-sm sm:text-base">Quyền Trợ Giúp 50/50</h4>
+                  <p className="text-xs text-gray-500 font-medium">Loại bỏ 2 phương án sai (sử dụng 1 lần mỗi tầng).</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Highscore Status & CTA */}
+            <div className="pt-4 space-y-6">
+              {highScore !== null && highScore > 0 ? (
+                <div className="inline-flex items-center gap-3 bg-amber-50/80 border border-amber-200/60 px-5 py-3 rounded-2xl text-amber-800 font-bold text-sm sm:text-base shadow-sm">
+                  <span className="text-xl">🏆</span>
+                  <span>
+                    Kỷ lục leo tháp hiện tại của bạn:{" "}
+                    <strong className="text-primary-red text-xl font-black">
+                      {highScore.toLocaleString()}
+                    </strong>{" "}
+                    điểm
+                  </span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-3 bg-gray-50 border border-gray-200/50 px-5 py-3 rounded-2xl text-gray-500 font-bold text-xs sm:text-sm shadow-inner">
+                  <span className="text-lg">🥇</span>
+                  <span>Chưa có kỷ lục nào được thiết lập. Hãy chơi để ghi danh!</span>
+                </div>
+              )}
+
+              <div>
+                <a
+                  href="/game"
+                  className="inline-flex h-14 items-center justify-center gap-3 rounded-full bg-primary-red hover:bg-primary-red-hover px-10 text-base font-extrabold text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-100 uppercase tracking-wider cursor-pointer group hover:shadow-primary-red/20"
+                >
+                  <span>Chơi Ngay Mini Game 🚀</span>
+                  <svg
+                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Tower Climb Visualization */}
+          <div className="lg:col-span-6 relative flex justify-center items-center py-8 lg:py-4">
+            
+            {/* Mascot dialog box & Mascot image */}
+            <div className="absolute -left-4 sm:left-4 top-0 z-20 hidden sm:flex flex-col items-center gap-1 anim-float">
+              <div className="relative bg-white border border-amber-200 rounded-2xl px-4 py-2.5 shadow-md text-xs font-bold text-amber-800 after:content-[''] after:absolute after:bottom-[-8px] after:left-1/2 after:translate-x-[-50%] after:border-[8px] after:border-transparent after:border-t-white before:content-[''] before:absolute before:bottom-[-9px] before:left-1/2 before:translate-x-[-50%] before:border-[8px] before:border-transparent before:border-t-amber-200">
+                Chinh phục đỉnh tháp nào!
+              </div>
+              <div className="relative h-20 w-20 drop-shadow-md">
                 <Image
                   src="/Pokecut_1779385694086 1.png"
-                  alt="Beaver mascot quiz"
+                  alt="Mascot Hải Ly"
                   fill
                   className="object-contain"
                   priority
                 />
               </div>
-
-              <div className="space-y-3">
-                <h3 className="text-xl sm:text-2xl font-extrabold text-gray-800">
-                  Bạn tự tin nắm chắc bao nhiêu % lý thuyết?
-                </h3>
-                <p className="max-w-md mx-auto text-sm sm:text-base text-gray-500 font-medium leading-relaxed">
-                  Cùng Hải Ly kiểm tra nhanh kiến thức cơ bản về triết học Mác - Lênin qua 3 câu hỏi trắc nghiệm thực hành thú vị!
-                </p>
-              </div>
-
-              <button
-                onClick={handleStartQuiz}
-                className="inline-flex h-13 items-center justify-center rounded-full bg-primary-red px-10 text-base font-extrabold text-white shadow-md transition-all duration-300 hover:bg-primary-red-hover hover:scale-105 hover:shadow-lg active:scale-100 uppercase tracking-wide cursor-pointer"
-              >
-                THỬ SỨC NGAY 🚀
-              </button>
             </div>
-          )}
 
-          {/* 2. ACTIVE QUESTION STATE */}
-          {quizState === "active" && (
-            <div className="flex flex-col text-left space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+            {/* Tower display */}
+            <div className="relative w-full max-w-sm flex flex-col gap-3.5 items-stretch bg-white/35 backdrop-blur-sm p-6 rounded-3xl border border-amber-100/30 shadow-inner">
               
-              {/* Question indicator & tracker */}
-              <div className="flex justify-between items-center pb-2 border-b border-dashed border-gray-100">
-                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-primary-red">
-                  Câu hỏi {currentIdx + 1} / {questions.length}
-                </span>
-                <span className="text-xs font-semibold text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
-                  Điểm số: {score}
-                </span>
-              </div>
-
-              {/* Question Text */}
-              <h3 className="text-lg sm:text-xl font-bold leading-relaxed text-gray-800">
-                {questions[currentIdx].question}
-              </h3>
-
-              {/* Options Grid */}
-              <div className="grid grid-cols-1 gap-3.5">
-                {questions[currentIdx].options.map((option, idx) => {
-                  let optionStyles = "border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 hover:border-gray-300";
-                  
-                  if (isAnswered) {
-                    const isCorrect = idx === questions[currentIdx].correctAnswer;
-                    const isSelected = idx === selectedAnswer;
-
-                    if (isCorrect) {
-                      // Correct option is always highlighted green once answered
-                      optionStyles = "border-emerald-300 bg-emerald-50/70 text-emerald-800 font-bold";
-                    } else if (isSelected) {
-                      // Selected incorrect option highlighted red
-                      optionStyles = "border-rose-300 bg-rose-50/70 text-rose-800 font-bold";
-                    } else {
-                      // Unselected non-correct options styled muted
-                      optionStyles = "border-gray-100 bg-white text-gray-400 opacity-60";
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={idx}
-                      disabled={isAnswered}
-                      onClick={() => handleSelectOption(idx)}
-                      className={`w-full flex items-start gap-4 rounded-2xl border-2 px-5 py-4 text-sm sm:text-base font-semibold transition-all duration-300 text-left cursor-pointer active:scale-99 ${optionStyles}`}
-                    >
-                      {/* Prefix letter */}
-                      <span className={`flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                        isAnswered && idx === questions[currentIdx].correctAnswer
-                          ? "bg-emerald-500 text-white"
-                          : isAnswered && idx === selectedAnswer
-                          ? "bg-rose-500 text-white"
-                          : "bg-amber-100 text-amber-700"
-                      }`}>
-                        {String.fromCharCode(65 + idx)}
-                      </span>
-                      <span>{option}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Explanation panel with beautiful slide down effect */}
-              {isAnswered && (
-                <div className="rounded-2xl border border-amber-100 bg-amber-50/40 p-5 space-y-2.5 animate-in slide-in-from-top-4 duration-300">
-                  <div className="flex items-center gap-2 text-amber-700 font-bold text-sm">
-                    <span>💡 GIẢI THÍCH CHI TIẾT:</span>
-                  </div>
-                  <p className="text-xs sm:text-sm leading-relaxed text-amber-800 font-medium">
-                    {questions[currentIdx].explanation}
-                  </p>
+              {/* Crown symbol on top */}
+              <div className="flex justify-center -mb-2">
+                <div className="h-10 w-10 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-xl shadow-sm animate-bounce">
+                  👑
                 </div>
-              )}
+              </div>
 
-              {/* Next Button */}
-              {isAnswered && (
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={handleNextQuestion}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#f3b150] px-8 text-sm font-extrabold text-white shadow-sm transition-all duration-300 hover:bg-[#df9937] hover:scale-102 cursor-pointer uppercase tracking-wider"
+              {towerFloors.map((floor, idx) => {
+                return (
+                  <div
+                    key={floor.num}
+                    className={`relative border-2 rounded-2xl p-4.5 transition-all duration-300 hover:scale-102 hover:shadow-md cursor-pointer group flex items-center gap-4 ${floor.color}`}
+                    title={floor.desc}
                   >
-                    {currentIdx < questions.length - 1 ? "Câu tiếp theo" : "Xem kết quả"} ➔
-                  </button>
-                </div>
-              )}
+                    {/* Floor number Badge */}
+                    <span
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold uppercase shadow-sm ${floor.pill}`}
+                    >
+                      T{floor.num}
+                    </span>
 
-            </div>
-          )}
+                    {/* Floor Content */}
+                    <div className="flex-1 min-w-0 text-left">
+                      <h4 className="font-extrabold text-sm sm:text-base leading-tight truncate">
+                        {floor.name}
+                      </h4>
+                      <p className="text-[10px] sm:text-xs opacity-75 font-medium truncate mt-0.5">
+                        {floor.desc}
+                      </p>
+                    </div>
 
-          {/* 3. RESULT STATE */}
-          {quizState === "result" && (
-            <div className="flex flex-col items-center text-center space-y-6 py-6 animate-in fade-in duration-300">
+                    {/* Floor Icon */}
+                    <span className="text-2xl transform transition-transform duration-300 group-hover:scale-125">
+                      {floor.icon}
+                    </span>
+                  </div>
+                );
+              })}
               
-              {/* Dynamic Badge based on score */}
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-4xl shadow-inner animate-bounce">
-                {score === questions.length ? "👑" : score >= 1 ? "🎉" : "💪"}
-              </div>
-
-              <div className="space-y-3">
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-800">
-                  Kết Quả Đạt Được!
-                </h3>
-                <div className="text-4xl sm:text-5xl font-black text-primary-red my-4">
-                  {score} / {questions.length}
-                </div>
-                <p className="max-w-md mx-auto text-sm sm:text-base text-gray-500 font-medium leading-relaxed">
-                  {score === questions.length
-                    ? "Xuất sắc! Bạn đã trả lời đúng toàn bộ câu hỏi. Kiến thức triết học của bạn vô cùng đáng nể!"
-                    : score >= 1
-                    ? "Khá tốt! Bạn đã nắm vững phần nào kiến thức cơ bản, hãy ôn tập thêm để đạt điểm tuyệt đối nhé."
-                    : "Đừng nản lòng! Triết học là một môn học trừu tượng, hãy cùng Hải Ly bắt đầu học đề cương ngay."}
-                </p>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4 w-full max-w-md">
-                <button
-                  onClick={handleStartQuiz}
-                  className="flex h-12 w-full sm:w-1/2 items-center justify-center rounded-full border-2 border-amber-200 text-sm font-bold text-amber-700 bg-white hover:bg-amber-50 hover:border-amber-300 transition-colors duration-200 cursor-pointer"
-                >
-                  🔄 LÀM LẠI
-                </button>
-                <a
-                  href="/lessons"
-                  className="flex h-12 w-full sm:w-1/2 items-center justify-center rounded-full bg-primary-red text-sm font-bold text-white shadow-sm hover:bg-primary-red-hover hover:scale-102 transition-all duration-200 cursor-pointer"
-                >
-                  📖 HỌC TIẾP ĐỀ CƯƠNG
-                </a>
-              </div>
-
+              {/* Base pedestal indicator */}
+              <div className="h-3 rounded-full bg-gray-200/80 border border-gray-300/40 w-11/12 mx-auto shadow-inner" />
             </div>
-          )}
+            
+            {/* Background elements */}
+            <div className="absolute right-4 bottom-0 z-0 h-28 w-28 opacity-10 anim-float-delay">
+              <Image
+                src="/Pokecut_1779381077162 1.png"
+                alt="Decoration Mascot"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+          </div>
 
         </div>
 

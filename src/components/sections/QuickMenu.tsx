@@ -84,7 +84,7 @@ export default function QuickMenu() {
           />
         </svg>
       ),
-      link: "#mini-quiz",
+      link: "/game",
     },
   ];
 

@@ -24,7 +24,7 @@ export default function Header() {
   // Dynamically resolve active tab name based on URL path or active anchor click
   const activeTab = isAIChatOpen
     ? "Hỏi đáp"
-    : clickedTab || (pathname.startsWith("/lessons") ? "Bài học" : "Trang chủ");
+    : clickedTab || (pathname.startsWith("/lessons") ? "Bài học" : pathname.startsWith("/game") ? " Mini Game" : "Trang chủ");
 
   // Reset local click overrides whenever the page pathname changes
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function Header() {
   const navItems = [
     { name: "Trang chủ", href: "/" },
     { name: "Bài học", href: "/lessons" },
-    { name: "Chọn học tập", href: "/#chon-che-do" },
+    { name: "Mini Game", href: "/game" },
     { name: "Hỏi đáp", href: "#" },
   ];
 

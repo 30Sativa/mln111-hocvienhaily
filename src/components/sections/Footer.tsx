@@ -77,7 +77,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-primary-red font-bold mt-1">📍</span>
-                <span>Address: 123 Ba Đình, Hà Nội, Việt Nam</span>
+                <span>Address: Vinhomes, Hồ Chí Minh, Việt Nam</span>
               </li>
             </ul>
 

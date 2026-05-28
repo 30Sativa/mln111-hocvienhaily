@@ -11,11 +11,11 @@ import AIChatPanel from "@/components/sections/AIChatPanel";
 type TabKey = "content" | "summary" | "quiz" | "flashcard" | "ai-chat";
 
 const tabs: { key: TabKey; label: string; icon: string }[] = [
-  { key: "content", label: "Nội dung", icon: "📖" },
-  { key: "summary", label: "Tóm tắt", icon: "📝" },
-  { key: "quiz", label: "Quiz", icon: "🎯" },
-  { key: "flashcard", label: "Flashcard", icon: "🃏" },
-  { key: "ai-chat", label: "Hỏi đáp AI", icon: "💬" },
+  { key: "content", label: "Nội dung", icon: "" },
+  { key: "summary", label: "Tóm tắt", icon: "" },
+  { key: "quiz", label: "Quiz", icon: "" },
+  { key: "flashcard", label: "Flashcard", icon: "" },
+  { key: "ai-chat", label: "Hỏi đáp AI", icon: "" },
 ];
 
 export default function LessonDetail({
