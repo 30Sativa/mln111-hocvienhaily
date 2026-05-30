@@ -69,6 +69,105 @@ export default function Lessons() {
         { name: "Flashcard ghi nhớ", link: "/lessons/5?tab=flashcard" },
       ],
     },
+    {
+      id: "6",
+      code: "Học phần 6",
+      subtitle: "Vật Chất Và Các Phương Thức Tồn Tại Của Vật Chất",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/6?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/6?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/6?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/6?tab=flashcard" },
+      ],
+    },
+    {
+      id: "7",
+      code: "Học phần 7",
+      subtitle: "Nguồn Gốc, Bản Chất Và Kết Cấu Của Ý Thức",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/7?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/7?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/7?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/7?tab=flashcard" },
+      ],
+    },
+    {
+      id: "8",
+      code: "Học phần 8",
+      subtitle: "Mối Quan Hệ Giữa Vật Chất Và Ý Thức",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/8?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/8?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/8?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/8?tab=flashcard" },
+      ],
+    },
+    {
+      id: "16",
+      code: "Học phần 16",
+      subtitle: "Nội Dung Của Phép Biện Chứng Duy Vật",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/16?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/16?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/16?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/16?tab=flashcard" },
+      ],
+    },
+    {
+      id: "17",
+      code: "Học phần 17",
+      subtitle: "Các Cặp Phạm Trù Cơ Bản Của Phép Biện Chứng Duy Vật",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/17?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/17?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/17?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/17?tab=flashcard" },
+      ],
+    },
+    {
+      id: "18",
+      code: "Học phần 18",
+      subtitle: "Tất Nhiên & Ngẫu Nhiên, Nội Dung & Hình Thức",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/18?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/18?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/18?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/18?tab=flashcard" },
+      ],
+    },
+    {
+      id: "19",
+      code: "Học phần 19",
+      subtitle: "Bản Chất & Hiện Tượng, Khả Năng & Hiện Thực",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/19?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/19?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/19?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/19?tab=flashcard" },
+      ],
+    },
+    {
+      id: "20",
+      code: "Học phần 20",
+      subtitle: "Quy Luật Lượng - Chất",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/20?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/20?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/20?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/20?tab=flashcard" },
+      ],
+    },
+    {
+      id: "21",
+      code: "Học phần 21",
+      subtitle: "Quy Luật Mâu Thuẫn & Phủ Định Của Phủ Định",
+      items: [
+        { name: "Nội dung bài học", link: "/lessons/21?tab=content" },
+        { name: "Tóm tắt đề cương", link: "/lessons/21?tab=summary" },
+        { name: "Quiz trắc nghiệm", link: "/lessons/21?tab=quiz" },
+        { name: "Flashcard ghi nhớ", link: "/lessons/21?tab=flashcard" },
+      ],
+    },
   ];
 
   return (
@@ -78,7 +177,7 @@ export default function Lessons() {
         {/* Centered Heading */}
         <div className="flex flex-col items-center justify-center mb-16 text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 font-sans">
-            Các chương học
+            Các học phần
           </h2>
           <div className="mt-3 h-1 w-16 rounded-full bg-amber-400" />
         </div>
